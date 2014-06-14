@@ -58,3 +58,8 @@ EXCLUDE_PRIME_YEARS: **false (optional, default true)**
     php console xml:convert GMT.xml PST true
 ```
 
+
+For UnitTests just run:
+```bash
+    phpunit
+```

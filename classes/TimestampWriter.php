@@ -26,11 +26,12 @@ class TimestampWriter extends XMLWriter
 	 * @access public
 	 * @return void
 	 */
-	public function __construct() {
+	public function __construct() 
+	{
 		$this->openMemory();
-         $this->setIndent(true);
-		 $this->startDocument('1.0', 'UTF-8');
-		 $this->startElement('timestamps');
+		$this->setIndent(true);
+		$this->startDocument('1.0', 'UTF-8');
+		$this->startElement('timestamps');
 	}
 
 	/**
@@ -41,7 +42,8 @@ class TimestampWriter extends XMLWriter
 	 * @param string $timezone (default: 'GMT')
 	 * @return void
 	 */
-	public function addTime($time, $timezone = 'GMT') {
+	public function addTime($time, $timezone = 'GMT') 
+	{
 	
 		$this->datetime = new DateTime($time, new DateTimeZone($timezone));
 		       
