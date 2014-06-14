@@ -1,0 +1,112 @@
+#!/usr/bin/env php
+<?php
+
+
+	/**
+	 * console 
+	 * 
+	 * Manipulate XML from Console
+	 * 
+	 * @file		console
+	 * @path		TimezoneConverter/console
+	*/
+
+
+
+
+
+
+//Set the default timezone 
+date_default_timezone_set('GMT');
+
+// AutoLoad Classes
+require 'classes/autoload.php';
+
+
+// Check we are running from the command line
+if(!Common::checkCli()) {
+	die('Command line only please');
+}
+
+
+//The console requires a command that needs to be run
+if(count($argv) < 3) {
+	
+	XMLTest::guide('Missing Arguments');
+	exit;
+}
+
+
+//Get Required Params
+$filename = $argv[2];
+
+
+//Get Optional param
+$exclude_prime = (!empty($argv[4]) && $argv[4] == 'false' ? false : true);
+
+
+switch($argv[1]) {
+	
+	case 'xml:create':
+		//Get the provided Timezone. If not Use Default
+		$timezone = (!empty($argv[3]) ? $argv[3] : 'GMT');
+		
+		if(! XMLTest::checkTimezone($timezone) )
+		{
+			Common::cliWrite('Please write a valid timezone', 'red');
+			break;
+		}
+		
+		//Try to Create
+		try
+		{
+			XMLTest::create($filename, $timezone, $exclude_prime);
+			
+			Common::cliWrite($filename.' created with the timezone '.$timezone, 'green');
+			Common::cliWrite('Prime years are '.($exclude_prime ? 'Excluded' : 'Included'), 'yellow');
+			
+		}
+		catch (Exception $e)
+		{
+			//Ok something happened
+			Common::cliWrite('There has been a error', 'red');
+			Common::cliWrite($e->getMessage(), 'red');
+		}
+		
+	break;
+        
+	case 'xml:convert':
+        //Get the provided Timezone. If not Use Default
+		$timezone = (!empty($argv[3]) ? $argv[3] : 'GMT');
+		
+		if(!XMLTest::checkTimezone($timezone))
+		{
+			XMLTest::guide($timezone.' is not a valid timezone!');
+			break;
+		}
+		
+		//Try to Create
+		try
+		{
+			XMLTest::convert($filename, $timezone, $exclude_prime);
+			
+			Common::cliWrite('File converted_'.$filename.' created with the timezone '.$timezone, 'green');
+			Common::cliWrite('Prime years are '.($exclude_prime ? 'Excluded' : 'Included'), 'yellow');
+			
+		}
+		catch (Exception $e)
+		{
+			//Ok something happened
+			Common::cliWrite('There has been a error', 'red');
+			Common::cliWrite($e->getMessage(), 'red');
+		}
+
+	
+	break;
+	
+	default:
+	
+		//Action not defined
+		XMLTest::guide('Command '.$argv[1].' not found. Check the Usage guide');
+        break;
+}
